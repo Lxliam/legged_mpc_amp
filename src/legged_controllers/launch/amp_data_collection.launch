@@ -1,0 +1,31 @@
+<launch>
+    <arg name="robot_type" default="$(env ROBOT_TYPE)" doc="Robot type: [a1, aliengo, go1, go2, Lite3]"/>
+    <arg name="amp_log_dir" default="$(find legged_controllers)/../../amp_data"/>
+    <arg name="amp_log_prefix" default="motion"/>
+    <arg name="cmd_vel_x" default="0.3"/>
+    <arg name="cmd_vel_yaw" default="0.0"/>
+    <arg name="duration" default="10.0"/>
+
+    <include file="$(find legged_robot_description)/launch/empty_world.launch">
+        <arg name="robot_type" value="$(arg robot_type)"/>
+    </include>
+
+    <include file="$(find legged_controllers)/launch/load_controller.launch">
+        <arg name="robot_type" value="$(arg robot_type)"/>
+        <arg name="cheater" value="false"/>
+        <arg name="enable_amp_logging" value="true"/>
+        <arg name="amp_log_dir" value="$(arg amp_log_dir)"/>
+        <arg name="amp_log_prefix" value="$(arg amp_log_prefix)"/>
+        <arg name="amp_log_frequency" value="50.0"/>
+        <arg name="amp_start_recording" value="true"/>
+    </include>
+
+    <node pkg="controller_manager" type="controller_manager" name="controller_starter"
+          output="screen" args="switch
+          --start controllers/legged_controller
+          --stop controllers/legged_cheater_controller
+    "/>
+
+    <node pkg="rostopic" type="rostopic" name="cmd_vel_publisher"
+          output="screen" args="pub -r 10 /cmd_vel geometry_msgs/Twist '{linear: {x: $(arg cmd_vel_x), y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: $(arg cmd_vel_yaw)}}'"/>
+</launch>

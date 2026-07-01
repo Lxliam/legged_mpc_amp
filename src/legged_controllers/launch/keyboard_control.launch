@@ -1,0 +1,36 @@
+<launch>
+    <arg name="robot_type" default="$(env ROBOT_TYPE)" doc="Robot type: [a1, aliengo, go1, go2, Lite3]"/>
+    <arg name="cheater" default="false"/>
+    <arg name="enable_amp_logging" default="true"/>
+    <arg name="amp_log_dir" default="$(find legged_controllers)/../../amp_data"/>
+    <arg name="amp_log_prefix" default="motion"/>
+    <arg name="amp_log_frequency" default="50.0"/>
+    <arg name="amp_start_recording" default="false"/>
+
+    <include file="$(find legged_controllers)/launch/load_controller.launch">
+        <arg name="robot_type" value="$(arg robot_type)"/>
+        <arg name="cheater" value="$(arg cheater)"/>
+        <arg name="enable_amp_logging" value="$(arg enable_amp_logging)"/>
+        <arg name="amp_log_dir" value="$(arg amp_log_dir)"/>
+        <arg name="amp_log_prefix" value="$(arg amp_log_prefix)"/>
+        <arg name="amp_log_frequency" value="$(arg amp_log_frequency)"/>
+        <arg name="amp_start_recording" value="$(arg amp_start_recording)"/>
+        <arg name="start_gait_keyboard" value="false"/>
+    </include>
+
+    <node pkg="legged_controllers" type="keyboard_control.py" name="legged_keyboard_control" output="screen">
+        <param name="robot_name" value="legged_robot"/>
+        <param name="rate" value="10.0"/>
+        <param name="linear_step" value="0.10"/>
+        <param name="yaw_step" value="0.10"/>
+        <param name="max_linear_x" value="1.00"/>
+        <param name="max_linear_y" value="0.50"/>
+        <param name="max_yaw" value="1.00"/>
+        <param name="linear_ramp_rate" value="0.50"/>
+        <param name="yaw_ramp_rate" value="0.80"/>
+        <param name="gait_settle_time" value="2.0"/>
+        <param name="gait_publish_duration" value="1.0"/>
+        <param name="gait_publish_period" value="0.1"/>
+        <param name="amp_recording_initial" value="$(arg amp_start_recording)"/>
+    </node>
+</launch>

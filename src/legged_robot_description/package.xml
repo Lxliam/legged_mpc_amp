@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package format="2">
+    <name>legged_robot_description</name>
+    <version>0.0.0</version>
+    <description>Generic quadruped robot description for NMPC-WBC gait generation and AMP data collection</description>
+    <maintainer email="user@example.com">legged_mpc_amp</maintainer>
+    <license>BSD</license>
+
+    <buildtool_depend>catkin</buildtool_depend>
+    <exec_depend>xacro</exec_depend>
+    <exec_depend>joint_state_publisher</exec_depend>
+    <exec_depend>robot_state_publisher</exec_depend>
+
+</package>

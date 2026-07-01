@@ -1,0 +1,10 @@
+.catkin_tools/
+build/
+devel/
+install/
+logs/
+*.pyc
+__pycache__/
+amp_data/
+amp_dataset_isaaclab/
+tmp/
