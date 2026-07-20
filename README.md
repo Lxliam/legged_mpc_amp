@@ -14,7 +14,8 @@
 # 1. 安装系统依赖（Ubuntu 20.04 + ROS Noetic）
 sudo apt update
 sudo apt install python3-catkin-tools python3-rosdep libeigen3-dev \
-  libboost-all-dev liburdfdom-dev libpinocchio-dev libhpp-fcl-dev
+  libboost-all-dev liburdfdom-dev \
+  ros-noetic-pinocchio ros-noetic-hpp-fcl
 
 # 2. 编译整个工作空间
 cd /path/to/legged_mpc_amp

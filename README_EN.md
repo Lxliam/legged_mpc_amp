@@ -14,7 +14,8 @@ A general-purpose AMP data generator for quadruped robots based on NMPC + WBC. I
 # 1. Install system dependencies (Ubuntu 20.04 + ROS Noetic)
 sudo apt update
 sudo apt install python3-catkin-tools python3-rosdep libeigen3-dev \
-  libboost-all-dev liburdfdom-dev libpinocchio-dev libhpp-fcl-dev
+  libboost-all-dev liburdfdom-dev \
+  ros-noetic-pinocchio ros-noetic-hpp-fcl
 
 # 2. Build the workspace
 cd /path/to/legged_mpc_amp
