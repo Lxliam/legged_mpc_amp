@@ -71,6 +71,8 @@ class LeggedController : public controller_interface::MultiInterfaceController<H
 
   std::unique_ptr<AmpDataLogger> ampDataLogger_;
   bool enableAmpLogging_{false};
+  double jointKp_{0.0};
+  double jointKd_{3.0};
 
  private:
   std::thread mpcThread_;

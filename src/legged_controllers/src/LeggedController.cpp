@@ -35,6 +35,8 @@ bool LeggedController::init(hardware_interface::RobotHW* robot_hw, ros::NodeHand
   controller_nh.getParam("/referenceFile", referenceFile);
   bool verbose = false;
   loadData::loadCppDataType(taskFile, "legged_robot_interface.verbose", verbose);
+  loadData::loadCppDataType(taskFile, "jointControlTask.kp", jointKp_);
+  loadData::loadCppDataType(taskFile, "jointControlTask.kd", jointKd_);
 
   setupLeggedInterface(taskFile, urdfFile, referenceFile, verbose);
   setupMpc();
@@ -147,7 +149,7 @@ void LeggedController::update(const ros::Time& time, const ros::Duration& period
   }
 
   for (size_t j = 0; j < leggedInterface_->getCentroidalModelInfo().actuatedDofNum; ++j) {
-    hybridJointHandles_[j].setCommand(posDes(j), velDes(j), 0, 3, torque(j));
+    hybridJointHandles_[j].setCommand(posDes(j), velDes(j), jointKp_, jointKd_, torque(j));
   }
 
   if (enableAmpLogging_ && ampDataLogger_) {

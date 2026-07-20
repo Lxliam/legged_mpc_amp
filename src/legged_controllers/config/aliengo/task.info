@@ -49,6 +49,12 @@ swing_trajectory_config
   bezierRoundness               0.0
 }
 
+jointControlTask
+{
+  kp                            0.0
+  kd                            3.0
+}
+
 foot_trajectory_tracking
 {
   enabled                       true
