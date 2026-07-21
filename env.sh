@@ -71,19 +71,8 @@ detect_pinocchio_pkgconfig() {
         return
     fi
 
-    local candidate
-    for candidate in \
-        "${CONDA_PREFIX:-}/lib/pkgconfig" \
-        "${HOME}/miniconda3/lib/pkgconfig" \
-        "${HOME}/anaconda3/lib/pkgconfig" \
-        "/usr/local/lib/pkgconfig" \
-        "/usr/lib/x86_64-linux-gnu/pkgconfig" \
-        "/usr/lib/pkgconfig"; do
-        if [ -f "${candidate}/pinocchio.pc" ]; then
-            PINOCCHIO_PKGCONFIG="${candidate}"
-            return
-        fi
-    done
+    # Prefer the Pinocchio provided by the sourced ROS environment. Custom
+    # and conda prefixes must be selected explicitly by the caller.
 }
 
 detect_ros_setup

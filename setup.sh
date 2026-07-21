@@ -50,19 +50,9 @@ detect_pinocchio_pkgconfig() {
         return
     fi
 
-    local candidate
-    for candidate in \
-        "${CONDA_PREFIX:-}/lib/pkgconfig" \
-        "${HOME}/miniconda3/lib/pkgconfig" \
-        "${HOME}/anaconda3/lib/pkgconfig" \
-        "/usr/local/lib/pkgconfig" \
-        "/usr/lib/x86_64-linux-gnu/pkgconfig" \
-        "/usr/lib/pkgconfig"; do
-        if [ -f "${candidate}/pinocchio.pc" ]; then
-            PINOCCHIO_PKGCONFIG="${candidate}"
-            return
-        fi
-    done
+    # The ROS setup has already populated PKG_CONFIG_PATH. Do not silently
+    # select a conda installation, which can mix Pinocchio with ROS HPP-FCL.
+    # Custom and conda prefixes must be selected explicitly by the caller.
 }
 
 print_dependency_help() {
@@ -73,7 +63,7 @@ print_dependency_help() {
     if command -v apt-get >/dev/null 2>&1; then
         echo "Recommended Ubuntu/Debian install command:"
         echo "  sudo apt update"
-        echo "  sudo apt install python3-catkin-tools python3-rosdep libeigen3-dev libboost-all-dev liburdfdom-dev libpinocchio-dev libhpp-fcl-dev"
+        echo "  sudo apt install python3-catkin-tools python3-rosdep libeigen3-dev libboost-all-dev liburdfdom-dev ros-${DEFAULT_ROS_DISTRO}-pinocchio ros-${DEFAULT_ROS_DISTRO}-hpp-fcl"
         echo "  rosdep install --from-paths src --ignore-src -r -y"
     else
         echo "This script did not detect apt-get. Install equivalent packages with your system package manager,"

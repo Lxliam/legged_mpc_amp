@@ -12,6 +12,9 @@ src/qpoases_catkin
 
 OCS2 RaiSim, MPCNet, documentation, and unrelated example packages are skipped through `CATKIN_IGNORE`. Pinocchio, HPP-FCL, Gazebo, ROS control, and related packages are still installed as system dependencies.
 
+The vendored OCS2 sources are patched for the ROS Noetic API. Use one Pinocchio/HPP-FCL
+installation consistently; do not mix the ROS packages with conda libraries.
+
 ## Install Dependencies
 
 The example below targets Ubuntu 20.04 + ROS Noetic. For other ROS 1 distributions, install equivalent packages:
@@ -21,7 +24,7 @@ sudo apt update
 sudo apt install \
   python3-catkin-tools python3-rosdep \
   libeigen3-dev libboost-all-dev liburdfdom-dev \
-  libpinocchio-dev libhpp-fcl-dev
+  ros-noetic-pinocchio ros-noetic-hpp-fcl
 
 cd /path/to/legged_mpc_amp
 source /opt/ros/noetic/setup.bash
@@ -34,7 +37,17 @@ If Pinocchio is installed from conda or a custom prefix, make sure `pkg-config` 
 export PINOCCHIO_PKGCONFIG="${CONDA_PREFIX}/lib/pkgconfig"
 ```
 
-If you use the system package `libpinocchio-dev`, this variable is usually not needed.
+For the ROS Noetic packages above, this variable is not needed. Do not point it
+at a conda or custom installation unless that installation is intentionally
+used for both Pinocchio and HPP-FCL.
+
+If a previous build selected a conda Pinocchio, remove that cached CMake option
+before rebuilding with the ROS packages:
+
+```bash
+catkin config --remove-args -Dpinocchio_DIR=/path/to/conda/lib/cmake/pinocchio
+catkin clean --build -y
+```
 
 ## Build
 
@@ -52,7 +65,7 @@ CATKIN_BUILD_ARGS="-DCMAKE_BUILD_TYPE=RelWithDebInfo" \
 bash setup.sh
 ```
 
-If Pinocchio comes from system packages, omit `PINOCCHIO_PKGCONFIG`. If your machine does not use Noetic, point `ROS_SETUP` to the matching ROS 1 `setup.bash`.
+With the ROS Noetic packages, omit `PINOCCHIO_PKGCONFIG`. If your machine does not use Noetic, point `ROS_SETUP` to the matching ROS 1 `setup.bash`.
 
 ## Source Every Terminal
 

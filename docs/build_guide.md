@@ -12,6 +12,8 @@ src/qpoases_catkin
 
 OCS2 的 RaiSim、MPCNet、文档和无关示例包通过 `CATKIN_IGNORE` 跳过。Pinocchio、HPP-FCL、Gazebo、ROS controller 等仍作为系统依赖安装。
 
+随仓库编译的 OCS2 已适配 ROS Noetic的 API。Pinocchio 与 HPP-FCL 必须来自同一套安装，不要混用 ROS 包和 conda 库。
+
 ## 安装依赖
 
 下面以 Ubuntu 20.04 + ROS Noetic 为例，其他 ROS 1 发行版请安装等价包：
@@ -21,7 +23,7 @@ sudo apt update
 sudo apt install \
   python3-catkin-tools python3-rosdep \
   libeigen3-dev libboost-all-dev liburdfdom-dev \
-  libpinocchio-dev libhpp-fcl-dev
+  ros-noetic-pinocchio ros-noetic-hpp-fcl
 
 cd /path/to/legged_mpc_amp
 source /opt/ros/noetic/setup.bash
@@ -34,7 +36,14 @@ rosdep install --from-paths src --ignore-src -r -y
 export PINOCCHIO_PKGCONFIG="${CONDA_PREFIX}/lib/pkgconfig"
 ```
 
-使用系统包 `libpinocchio-dev` 时通常不需要设置这个变量。
+使用上面的 ROS Noetic 包时不需要设置该变量。除非明确希望 Pinocchio 和 HPP-FCL 都使用 conda 或自定义安装，否则不要把它指向这类路径。
+
+如果此前编译时选择过 conda 的 Pinocchio，切换到 ROS 包前需要删除缓存的 CMake 参数：
+
+```bash
+catkin config --remove-args -Dpinocchio_DIR=/path/to/conda/lib/cmake/pinocchio
+catkin clean --build -y
+```
 
 ## 编译
 
@@ -52,7 +61,7 @@ CATKIN_BUILD_ARGS="-DCMAKE_BUILD_TYPE=RelWithDebInfo" \
 bash setup.sh
 ```
 
-如果 Pinocchio 使用系统包，可以省略 `PINOCCHIO_PKGCONFIG`。如果机器不是 Noetic，把 `ROS_SETUP` 改成对应 ROS 1 发行版的 `setup.bash`。
+使用 ROS Noetic 包时可以省略 `PINOCCHIO_PKGCONFIG`。如果机器不是 Noetic，把 `ROS_SETUP` 改成对应 ROS 1 发行版的 `setup.bash`。
 
 ## 每个终端都 source
 
